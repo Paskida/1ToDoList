@@ -1,0 +1,300 @@
+/**********************************************
+*** ISSUES
+**********************************************/
+
+/* Doesn't work: When the checkbox is checked, line-through  */
+
+/**********************************************
+*** GENERAL
+**********************************************/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+body {
+  color: #555;
+  font-family: Open Sans;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.todo {
+  position: relative;
+  height: 100vh;
+}
+
+/**********************************************
+*** TOP picture
+**********************************************/
+
+.top {
+  height: 40vh;
+  background-image: linear-gradient(
+      90deg,
+      rgba(181, 52, 255, 0.7),
+      rgba(1, 107, 206, 0.7)
+    ),
+    url(back.png);
+  background-size: cover;
+  background-position: top;
+}
+
+/**********************************************
+*** HEADING
+**********************************************/
+.heading-white {
+  color: white;
+  letter-spacing: 1.5rem;
+  font-size: 2.5rem;
+}
+
+.title {
+  padding: 2rem 0;
+}
+
+/**********************************************
+*** LIST
+**********************************************/
+
+.list {
+  position: absolute;
+  left: 50%;
+  top: 10rem;
+  transform: translateX(-50%);
+  min-width: 30vw;
+}
+
+/* Input */
+
+.input-field {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #e7e7e7;
+  background-color: #fff;
+  border-radius: 5px;
+  transition: border 0.3s;
+  cursor: pointer;
+  margin-bottom: 2rem;
+
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 0.8rem 0.8rem 0.8rem 4rem;
+}
+
+.input__task {
+  border: none;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.input-field__checkmark {
+  position: absolute;
+  top: 0.8rem;
+  left: 1.5rem;
+  height: 25px;
+  width: 25px;
+  background-color: #fff;
+  border-radius: 1000px;
+  border: 1px solid #e9e7e7;
+}
+
+.input__task:focus {
+  outline: none;
+}
+
+.add {
+  align-self: center;
+  border: none;
+  background-color: #fff;
+}
+
+.cross {
+  width: 1em;
+  height: 1em;
+  background-color: rgb(83, 83, 83);
+  font-size: 1.5rem;
+  clip-path: polygon(
+    47.5% 0%,
+    47.5% 47.5%,
+    0 47.5%,
+    0 52.5%,
+    47.5% 52.5%,
+    47.5% 100%,
+    52.5% 100%,
+    52.5% 52.5%,
+    100% 52.5%,
+    100% 47.5%,
+    52.5% 47.5%,
+    52.5% 0
+  );
+}
+
+/* Tasks + filter */
+
+.main-part {
+  border-radius: 5px;
+  margin-bottom: 2rem;
+  background-color: #fff;
+  font-family: inherit;
+  width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+/* Tasks*/
+
+.item {
+  border-bottom: 1px solid #e7e7e7;
+  font-size: 1rem;
+  padding: 0.8rem;
+  transition: border 0.3s;
+  cursor: pointer;
+
+  position: relative;
+  display: block;
+  user-select: none;
+  padding-left: 4rem;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.item__task {
+  cursor: pointer;
+}
+
+label {
+  cursor: pointer;
+}
+
+.delete {
+  width: 1em;
+  height: 1em;
+  background-color: rgb(83, 83, 83);
+  clip-path: polygon(
+    5% 0%,
+    0% 5%,
+    45% 50%,
+    0% 95%,
+    5% 100%,
+    50% 55%,
+    95% 100%,
+    100% 95%,
+    55% 50%,
+    100% 5%,
+    95% 0%,
+    50% 45%
+  );
+  align-self: center;
+  display: none;
+}
+
+/* Filter */
+
+.filter {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  padding: 0.8rem 1rem;
+}
+
+.filter__item,
+.filter__clear-completed {
+  cursor: pointer;
+}
+
+.filter__item:hover,
+.filter__clear-completed:hover {
+  font-weight: bold;
+}
+
+.filter__criteria {
+  display: flex;
+  gap: 1rem;
+}
+
+/**********************************************
+*** CHECKBOX
+**********************************************/
+
+/* Hide the browser's default checkbox */
+.item input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* .item p {
+  text-decoration: line-through;
+  color: rgb(219, 219, 219);
+} */
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  left: 1.5rem;
+  height: 25px;
+  width: 25px;
+  background-color: #fff;
+  border-radius: 1000px;
+  border: 1px solid #b6b6b6;
+}
+
+/* On mouse-over, add a dark grey border color */
+.item:hover input ~ .checkmark {
+  border: 1px solid #4e4e4e;
+}
+
+/* On mouse-over, show delete cross */
+.item:hover input ~ .delete {
+  display: block;
+}
+
+/* When the checkbox is checked, add a blue-purple background */
+.item input:checked ~ .checkmark {
+  background: linear-gradient(
+    45deg,
+    rgba(181, 52, 255, 0.7),
+    rgba(1, 107, 206, 0.7)
+  );
+}
+
+/* !!!!!!!!!!!!!!!!!!!!!!! When the checkbox is checked, line-through  */
+.item input:checked ~ .item p {
+  text-decoration: line-through;
+  color: rgb(219, 219, 219);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.item input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.item .checkmark:after {
+  left: 7px;
+  top: 5px;
+  width: 5px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}

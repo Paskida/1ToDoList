@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link type="text/css" rel="stylesheet" href="style.css" />
+    <script defer src="app.js"></script>
+    <title>ToDo List</title>
+  </head>
+  <body>
+    <section class="todo">
+      <div class="top"></div>
+      <div class="list">
+        <div class="title">
+          <h1 class="heading-white">TODO</h1>
+        </div>
+        <div class="input-field">
+          <input type="text" class="input__task" placeholder="Add task" />
+          <span class="input-field__checkmark"></span>
+          <button class="add">
+            <div class="cross"></div>
+          </button>
+        </div>
+        <div class="main-part">
+          <div class="items"></div>
+          <div class="filter">
+            <div class="filter__items-left">5 items left</div>
+            <div class="filter__criteria">
+              <div class="filter__item">All</div>
+              <div class="filter__item">Active</div>
+              <div class="filter__item">Completed</div>
+            </div>
+            <div class="filter__clear-completed">Clear Completed</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
