@@ -155,30 +155,34 @@ body {
 .item {
   border-bottom: 1px solid #e7e7e7;
   font-size: 1rem;
-  padding: 0.8rem;
   transition: border 0.3s;
   cursor: pointer;
-
   position: relative;
-  display: block;
   user-select: none;
-  padding-left: 4rem;
-
+  padding-left: 3rem;
+  padding-right: 0.8rem;
   display: flex;
   justify-content: space-between;
 }
 
-.item__task {
+.item-label {
   cursor: pointer;
+  flex-grow: 1;
+  padding: 0.8rem;
 }
 
 label {
   cursor: pointer;
 }
-
 .delete {
-  width: 1em;
-  height: 1em;
+  align-self: center;
+  border: none;
+  background-color: #fff;
+  opacity: 0;
+}
+.delete-cross {
+  width: 1.5em;
+  height: 1.5em;
   background-color: rgb(83, 83, 83);
   clip-path: polygon(
     5% 0%,
@@ -195,6 +199,13 @@ label {
     50% 45%
   );
   align-self: center;
+}
+
+.hide {
+  display: none;
+}
+
+.hide-to-delete {
   display: none;
 }
 
@@ -235,11 +246,6 @@ label {
   width: 0;
 }
 
-/* .item p {
-  text-decoration: line-through;
-  color: rgb(219, 219, 219);
-} */
-
 /* Create a custom checkbox */
 .checkmark {
   position: absolute;
@@ -251,18 +257,13 @@ label {
   border: 1px solid #b6b6b6;
 }
 
-/* On mouse-over, add a dark grey border color */
-.item:hover input ~ .checkmark {
-  border: 1px solid #4e4e4e;
-}
-
 /* On mouse-over, show delete cross */
-.item:hover input ~ .delete {
-  display: block;
+.item:hover .delete {
+  opacity: 1;
 }
 
 /* When the checkbox is checked, add a blue-purple background */
-.item input:checked ~ .checkmark {
+.item-label.checked .checkmark {
   background: linear-gradient(
     45deg,
     rgba(181, 52, 255, 0.7),
@@ -271,7 +272,7 @@ label {
 }
 
 /* !!!!!!!!!!!!!!!!!!!!!!! When the checkbox is checked, line-through  */
-.item input:checked ~ .item p {
+.item-label.checked {
   text-decoration: line-through;
   color: rgb(219, 219, 219);
 }
@@ -284,12 +285,12 @@ label {
 }
 
 /* Show the checkmark when checked */
-.item input:checked ~ .checkmark:after {
+.item-label.checked .checkmark:after {
   display: block;
 }
 
 /* Style the checkmark/indicator */
-.item .checkmark:after {
+.item-label .checkmark:after {
   left: 7px;
   top: 5px;
   width: 5px;
