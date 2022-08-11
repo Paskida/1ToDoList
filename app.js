@@ -172,11 +172,3 @@ btnCompleted.addEventListener("click", function (e) {
       : item.parentNode.classList.add("hide")
   );
 });
-
-function solution(n) {
-  const k = String(n).slice(0, 1);
-  const l = String(n).slice(1, 2);
-  return +k + +l;
-}
-
-console.log(solution(29));
