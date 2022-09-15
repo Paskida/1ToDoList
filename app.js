@@ -1,18 +1,8 @@
-"use strict";
-
-/**********************************************
- *** ISSUES
- **********************************************/
-
-// 1. Connection between data completed and checked???  + Items left
-// 2. Clear Completed
-// 3. Handle the error on delete button
-
 ///////////////////////////////////////
 // DATA
 ///////////////////////////////////////
 
-const dummy_tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let dummy_tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 ///////////////////////////////////////
 // ELEMENTS
@@ -33,10 +23,13 @@ const taskInput = document.querySelector(".input__task");
 // FUNCTIONS
 ///////////////////////////////////////
 
+// Display functionality
 const displayTask = function (task, placeToAdd = "afterbegin") {
   const html = `
     <div class="item" id="${task.id}">
-      <label class="item-label" ${task.completed ? "checked" : ""}>${task.title}
+      <label class="item-label ${task.completed ? "checked" : ""}" ${
+    task.completed ? "checked" : ""
+  }>${task.title}
             <input type="checkbox" class="item__task" name="item__task"/>
               <span class="checkmark"></span>
       </label>
@@ -52,15 +45,28 @@ const displayAllTasks = function (tasks) {
   tasks.forEach((task) => displayTask(task));
 };
 
-const deleteTask = function (i) {
-  dummy_tasks.splice(i, 1);
+// Delete functionality
+const deleteTask = function (el) {
+  dummy_tasks = dummy_tasks.splice(el.id, 1);
   localStorage.setItem("tasks", JSON.stringify(dummy_tasks));
+  el.remove();
 };
 
 const deleteCompletedTasks = function () {
-  const modified_tasks = dummy_tasks.filter((task) => task.completed);
+  const filteredTasks = dummy_tasks.reduce((acc, task) => {
+    if (task.completed) {
+      const taskEl = document.getElementById(`${task.id}`);
+      taskEl.remove();
+    } else {
+      acc.push(task);
+    }
+
+    return acc;
+  }, []);
+  localStorage.setItem("tasks", JSON.stringify(filteredTasks));
 };
 
+// Task Counter functionality
 const changeTasksCounter = function () {
   const notCompletedLength = dummy_tasks.filter(
     (task) => !task.completed
@@ -68,6 +74,7 @@ const changeTasksCounter = function () {
   containerItemsLeft.innerHTML = `${notCompletedLength} items left`;
 };
 
+// Show All
 const showUI = function (tasks) {
   displayAllTasks(tasks);
   changeTasksCounter();
@@ -80,8 +87,8 @@ showUI(dummy_tasks);
 ///////////////////////////////////////
 
 // Adding a task
-btnAdd.addEventListener("click", function (e) {
-  e.preventDefault();
+
+const addTask = function () {
   const taskValue = taskInput.value.trim();
   const title = !taskValue.length ? "No name task" : taskValue;
 
@@ -100,40 +107,62 @@ btnAdd.addEventListener("click", function (e) {
   changeTasksCounter();
 
   taskInput.value = "";
+};
+
+btnAdd.addEventListener("click", function (e) {
+  e.preventDefault();
+  addTask();
 });
 
-// Checking and unchecking - !!! save in local storage
+document.addEventListener("keypress", function (e) {
+  if (e.key === "Enter") {
+    addTask();
+  }
+});
+
+// Checking and unchecking
+function changeTaskCompleted(parentEl) {
+  const neededId = parentEl.id;
+  const foundItemIndex = dummy_tasks.findIndex(
+    (task) => +task.id === +neededId
+  );
+
+  dummy_tasks[foundItemIndex].completed =
+    !dummy_tasks[foundItemIndex].completed;
+
+  localStorage.setItem("tasks", JSON.stringify(dummy_tasks));
+}
+
+// Checking and unchecking
 containerTasks.addEventListener("click", function (e) {
   e.preventDefault();
 
   const targetEl = e.target;
-  targetEl.closest(".item-label").classList.toggle("checked");
 
-  const neededId = e.target.closest(".item").id;
-  const foundItem = dummy_tasks.find((task) => (task.id = neededId));
-  console.log(foundItem);
-  foundItem.completed = !foundItem.completed;
-  //?????
-  /* localStorage.setItem(foundItem, JSON.stringify(foundItem.completed)); */
+  if (targetEl.classList.contains("delete")) {
+    const parentEl = targetEl.closest(".item");
+    deleteTask(parentEl);
+    changeTasksCounter();
+    return;
+  }
+
+  if (
+    targetEl.classList.contains("item-label") ||
+    targetEl.classList.contains("checkmark")
+  ) {
+    const parentEl = targetEl.closest(".item");
+    targetEl.closest(".item-label").classList.toggle("checked");
+    changeTaskCompleted(parentEl);
+    changeTasksCounter();
+    return;
+  }
 });
-
-// Deleting
-// Deleting from UI + deleting from LocalStorage on updating the page
-const deleteBtn = document.querySelectorAll(".delete"); // here, because in the beginning it doesn't exist
-
-deleteBtn.forEach((btn) =>
-  btn.addEventListener("click", function (e) {
-    e.preventDefault();
-    deleteTask(e.target.closest(".item").id);
-    e.target.closest(".item").classList.add("hide-to-delete");
-  })
-);
 
 btnClearCompleted.addEventListener("click", function (e) {
   e.preventDefault();
 
   deleteCompletedTasks();
-  containerItemsAll.forEach((item) =>
+  [...containerItemsAll].forEach((item) =>
     item.classList.contains("checked")
       ? item.parentNode.classList.add("hide-to-delete")
       : ""
@@ -142,20 +171,22 @@ btnClearCompleted.addEventListener("click", function (e) {
 
 // FILTERS
 
-const containerItemsAll = document.querySelectorAll(".item-label"); // here, because in the beginning it doesn't exist
+const containerItemsAll = document.getElementsByClassName("item-label");
 
 // Show all
 btnAll.addEventListener("click", function (e) {
   e.preventDefault();
 
-  containerItemsAll.forEach((item) => item.parentNode.classList.remove("hide"));
+  [...containerItemsAll].forEach((item) =>
+    item.parentNode.classList.remove("hide")
+  );
 });
 
 // Show unchecked - active
 btnActive.addEventListener("click", function (e) {
   e.preventDefault();
 
-  containerItemsAll.forEach((item) =>
+  [...containerItemsAll].forEach((item) =>
     item.classList.contains("checked")
       ? item.parentNode.classList.add("hide")
       : item.parentNode.classList.remove("hide")
@@ -165,10 +196,9 @@ btnActive.addEventListener("click", function (e) {
 // Show checked - completed
 btnCompleted.addEventListener("click", function (e) {
   e.preventDefault();
-
-  containerItemsAll.forEach((item) =>
-    item.classList.contains("checked")
-      ? item.parentNode.classList.remove("hide")
-      : item.parentNode.classList.add("hide")
+  [...containerItemsAll].forEach((item) =>
+    !item.classList.contains("checked")
+      ? item.parentNode.classList.add("hide")
+      : item.parentNode.classList.remove("hide")
   );
 });

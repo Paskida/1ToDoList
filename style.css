@@ -29,7 +29,7 @@ body {
 
 .todo {
   position: relative;
-  height: 100vh;
+  max-height: 100vh;
 }
 
 /**********************************************
@@ -43,7 +43,7 @@ body {
       rgba(181, 52, 255, 0.7),
       rgba(1, 107, 206, 0.7)
     ),
-    url(back.png);
+    url(back.jpg);
   background-size: cover;
   background-position: top;
 }
@@ -70,7 +70,7 @@ body {
   left: 50%;
   top: 10rem;
   transform: translateX(-50%);
-  min-width: 30vw;
+  min-width: 30rem;
 }
 
 /* Input */
@@ -95,6 +95,8 @@ body {
   border: none;
   font-family: inherit;
   font-size: 1rem;
+  width: inherit;
+  margin-left: 1rem;
 }
 
 .input-field__checkmark {
