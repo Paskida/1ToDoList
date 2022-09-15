@@ -47,7 +47,8 @@ const displayAllTasks = function (tasks) {
 
 // Delete functionality
 const deleteTask = function (el) {
-  dummy_tasks = dummy_tasks.splice(el.id, 1);
+  const index = dummy_tasks.findIndex((element) => element.id == el.id);
+  dummy_tasks.splice(index, 1);
   localStorage.setItem("tasks", JSON.stringify(dummy_tasks));
   el.remove();
 };
